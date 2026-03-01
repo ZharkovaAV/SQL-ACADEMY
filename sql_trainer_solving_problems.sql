@@ -248,3 +248,24 @@ FROM Payments
 	JOIN Goods ON Goods.good_id = Payments.good
 WHERE Goods.good_name = 'potato'
 GROUP BY STATUS
+
+/*
+Задание #20
+Траты на развлечения
+Сколько и кто из семьи потратил на развлечения (entertainment). Вывести статус в семье, имя, сумму
+Используйте конструкцию "as costs" для отображения затраченной суммы членом семьи. Это необходимо для корректной проверки.
+Поля в результирующей таблице:
+status
+member_name
+costs
+*/
+SELECT STATUS,
+	member_name,
+	SUM(amount * unit_price) AS costs
+FROM Payments
+	JOIN FamilyMembers ON FamilyMembers.member_id = Payments.family_member
+	JOIN Goods ON Payments.good = Goods.good_id
+	JOIN GoodTypes ON Goods.type = GoodTypes.good_type_id
+WHERE GoodTypes.good_type_name = 'entertainment'
+GROUP BY STATUS,
+	member_name
