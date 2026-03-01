@@ -5,7 +5,6 @@
 Поля в результирующей таблице:
 name
 */
-
 SELECT name
 FROM Passenger
 
@@ -16,7 +15,6 @@ FROM Passenger
 Поля в результирующей таблице:
 name
 */
-
 SELECT name
 FROM Company
 
@@ -27,7 +25,6 @@ FROM Company
 Поля в результирующей таблице:
 *
 */
-
 SELECT *
 FROM Trip
 WHERE town_from = 'Moscow'
@@ -39,7 +36,6 @@ WHERE town_from = 'Moscow'
 Поля в результирующей таблице:
 name
 */
-
 SELECT name
 FROM Passenger
 WHERE name LIKE '%man'
@@ -52,7 +48,6 @@ WHERE name LIKE '%man'
 Поля в результирующей таблице:
 count
 */
-
 SELECT COUNT(*) AS COUNT
 FROM Trip
 WHERE plane = 'TU-134'
@@ -64,7 +59,6 @@ WHERE plane = 'TU-134'
 Поля в результирующей таблице:
 name
 */
-
 SELECT Company.name
 FROM Trip
 	LEFT JOIN Company ON Company.id = Trip.company
@@ -78,7 +72,6 @@ GROUP BY company
 Поля в результирующей таблице:
 plane
 */
-
 SELECT plane
 FROM Trip
 WHERE town_to = 'Moscow'
@@ -94,7 +87,6 @@ GROUP BY plane
 town_to
 flight_time
 */
-
 SELECT town_to,
 	TIMEDIFF(time_in, time_out) AS flight_time
 FROM Trip
@@ -107,7 +99,6 @@ WHERE town_from = 'Paris'
 Поля в результирующей таблице:
 name
 */
-
 SELECT Company.name
 FROM Trip
 	LEFT JOIN Company ON Trip.company = Company.id
@@ -121,7 +112,6 @@ GROUP BY Company.name
 Поля в результирующей таблице:
 *
 */
-
 SELECT *
 FROM Trip
 WHERE time_out BETWEEN '1900-01-01T10:00:00.000Z' AND '1900-01-01T14:00:00.000Z'
@@ -133,7 +123,6 @@ WHERE time_out BETWEEN '1900-01-01T10:00:00.000Z' AND '1900-01-01T14:00:00.000Z'
 Поля в результирующей таблице:
 name
 */
-
 SELECT name
 FROM passenger
 WHERE LENGTH(name) = (
@@ -149,7 +138,6 @@ WHERE LENGTH(name) = (
 id
 count
 */
-
 SELECT Trip.id, COUNT(Pass_in_trip.id) AS count
 FROM Trip
 LEFT JOIN Pass_in_trip ON Trip.id = Pass_in_trip.trip
@@ -162,7 +150,6 @@ GROUP BY Trip.id
 Поля в результирующей таблице:
 name
 */
-
 SELECT name
 FROM Passenger
 GROUP BY name
@@ -175,7 +162,6 @@ HAVING COUNT(name) > 1
 Поля в результирующей таблице:
 town_to
 */
-
 SELECT town_to
 FROM Passenger
 	JOIN Pass_in_trip ON Passenger.id = Pass_in_trip.passenger
@@ -190,7 +176,6 @@ WHERE name = 'Bruce Willis'
 id
 time_in
 */
-
 SELECT Passenger.id,
 	Trip.time_in
 FROM Passenger
@@ -208,7 +193,6 @@ WHERE Passenger.name = 'Steve Martin'
 name
 count
 */
-	
 SELECT name,
 	COUNT(name) AS COUNT
 FROM Passenger
@@ -228,7 +212,6 @@ member_name
 status
 costs
 */
-
 SELECT member_name,
 	STATUS,
 	SUM(unit_price * amount) AS costs
@@ -245,10 +228,23 @@ GROUP BY member_name,
 Поля в результирующей таблице:
 member_name
 */
-
 SELECT member_name
 FROM FamilyMembers
 WHERE birthday = (
 		SELECT MIN(birthday)
 		FROM FamilyMembers
 	)
+
+/*
+Задание #19
+Кто покупал картошку
+Определить, кто из членов семьи покупал картошку (potato)
+Поля в результирующей таблице:
+status
+*/
+SELECT STATUS
+FROM Payments
+	JOIN FamilyMembers ON FamilyMembers.member_id = Payments.family_member
+	JOIN Goods ON Goods.good_id = Payments.good
+WHERE Goods.good_name = 'potato'
+GROUP BY STATUS
